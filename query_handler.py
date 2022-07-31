@@ -1,8 +1,7 @@
 
 import mysql.connector;
 from mysql.connector import errorcode
-import numpy as np
-from tkinter import *
+
 # connection details
 db = mysql.connector.connect(
     host = "localhost",
@@ -21,31 +20,24 @@ print("========================================================================"
 print("Sucessfuly connected to {} database".format(DB_NAME))
 print("-----------------------------------")
 
+# EVERYTHING FROM RECIPE
 def query1():
-    mycursor.execute("SELECT * FROM rm_recipe")
-    i = 0
-    for recipe in mycursor:
-        for j in range(len(recipe)):
-            e = Entry(root, width=50, fg='blue')
-            e.grid(row=i, column=j)
-            e.insert(END, recipe[j])
-        i+=1
+    query = "SELECT * FROM rm_recipe"
+    mycursor.execute(query)
+    for row in mycursor:
+        print (row)
 
+# TAGS WITH RECIPE TITLE AND COOKING TIME
+def query2():
+    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = 'Pasta'"
+    mycursor.execute(query)
+    for row in mycursor:
+        print (row)
 
-root = Tk()
-
-root.title=('Recipe finder!')
-root.geometry("800x800")
-
-mycursor.execute("SELECT * FROM rm_recipe")
-i = 0
-for recipe in mycursor:
-    for j in range(len(recipe)):
-        e = Entry(root, width=50, fg='blue')
-        e.grid(row=i, column=j)
-        e.insert(END, recipe[j])
-    i+=1
-
-root.mainloop()
-
+# INGREDIENT NAMES FOR A GIVEN RECIPE
+def query3():
+    query = "SELECT NAME from rm_ingredient JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID WHERE rm_recipe.RECIPE_NAME = 'Carbonara'"
+    mycursor.execute(query)
+    for row in mycursor:
+        print (row)
 
