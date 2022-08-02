@@ -1,15 +1,27 @@
+from black import main
+from query_handler import *
 
-from pyparsing import col
-import query_handler as qh
-from tkinter import *
+print("THE RECIPE FINDER!")
+print("------------------")
 
-root = Tk()
+incrementNumber = 0
 
-root.title=('Recipe finder!')
-root.geometry("800x800")
-
-qh.query1()
-
-root.mainloop()
-
-
+while True:
+    incrementNumber += 1
+    try:
+        mycursor.execute("USE {}".format(DB_NAME))
+        print("========================================================================")
+        print("Sucessfuly connected to {} database".format(DB_NAME))
+        print("========================================================================")
+        introText()
+    except mysql.connector.Error as err:
+        print("Database {} does not exist".format(DB_NAME))
+        break
+    while incrementNumber > 0:
+        mainEntry = int(input("Provide a number:"))
+        print("-> KEY " + str(mainEntry) + " PRESSED <-")
+        print("Executing...")
+        print("------------")
+        if mainEntry == 1:
+            subEntry = str(input("Provide a tag:"))
+            query2(subEntry)

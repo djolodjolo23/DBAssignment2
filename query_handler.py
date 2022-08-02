@@ -18,21 +18,21 @@ DB_NAME = "assignment3"
 mycursor.execute("USE {}".format(DB_NAME))
 print("========================================================================")
 print("Sucessfuly connected to {} database".format(DB_NAME))
-print("-----------------------------------")
+print("========================================================================")
 
 # EVERYTHING FROM RECIPE
 def query1():
     query = "SELECT * FROM rm_recipe"
     mycursor.execute(query)
     for row in mycursor:
-        print (row)
+        print(row)
 
 # TAGS WITH RECIPE TITLE AND COOKING TIME
-def query2():
-    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = 'Pasta'"
+def query2(tagInput):
+    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = '" + tagInput + "'"
     mycursor.execute(query)
     for row in mycursor:
-        print (row)
+        print(row)
 
 # INGREDIENT NAMES FOR A GIVEN RECIPE
 def query3():
@@ -44,7 +44,7 @@ def query3():
             """
     mycursor.execute(query)
     for row in mycursor:
-        print (row)
+        print(row)
 
 def query4():
     query = """
@@ -55,7 +55,7 @@ def query4():
             """
     mycursor.execute(query)
     for row in mycursor:
-        print (row)
+        print(row)
 
 def query5():
     query = """
@@ -65,7 +65,7 @@ def query5():
             """
     mycursor.execute(query)
     for row in mycursor:
-        print (row)
+        print(row)
 
 #getting the recipe title with all the ingredients concatenated
 def query6():
@@ -86,6 +86,35 @@ def query7():
             """
     mycursor.execute(query)
     for row in mycursor:
-        print (row)
+        print(row)
 
-query7()
+
+def query8():
+    query = """
+            SELECT NAME, TITLE, COOKING_TIME
+            FROM Recipe_View
+            WHERE COOKING_TIME <= 30
+            """
+    mycursor.execute(query)
+    for row in mycursor:
+        print(row)
+
+def query9():
+    query = """
+            SELECT TITLE FROM rm_recipe
+            """
+    mycursor.execute(query)
+    for row in mycursor:
+        tupleWithoutComma = ''.join(row)
+        print("{:<15}".format(tupleWithoutComma))
+
+def introText():
+    print("")
+    print("                           RECIPE FINDER!")
+    print("------------------------------------------------------------------------")
+    query9()
+    print("------------------------------------------------------------------------")
+    print("1. Provide a recipe tag to find it.")
+
+
+query2("Italian")
