@@ -1,6 +1,7 @@
 
 import mysql.connector;
 from mysql.connector import errorcode
+from tabulate import tabulate
 
 # connection details
 db = mysql.connector.connect(
@@ -31,26 +32,21 @@ def query1():
 def query2(tagInput):
     query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = '" + tagInput + "'"
     mycursor.execute(query)
-    for row in mycursor:
-        print(row)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['TAG', 'RECIPE NAME', 'COOKING TIME'], tablefmt='psql'))
 
 # INGREDIENT NAMES FOR A GIVEN RECIPE
 def query3(recipeNameInput):
     query = "SELECT NAME from rm_ingredient JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID WHERE rm_recipe.TITLE = '" + recipeNameInput + "'"
     mycursor.execute(query)
-    for row in mycursor:
-        print(row)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['INGREDIENT NAME'], tablefmt='psql'))
 
-def query4():
-    query = """
-            SELECT NAME, rm_recipe.TITLE, rm_recipe.DESCRIPTION
-            FROM rm_useracc
-            JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID
-            WHERE rm_useracc.NAME = 'Djordje'
-            """
+def query4(userInput):
+    query = "SELECT NAME, rm_recipe.TITLE FROM rm_useracc JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID WHERE rm_useracc.NAME = '" + userInput + "'"
     mycursor.execute(query)
-    for row in mycursor:
-        print(row)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['USER', 'RECIPE NAME'], tablefmt='psql'))
 
 def query5():
     query = """
@@ -59,8 +55,8 @@ def query5():
             GROUP BY rm_useracc.NAME
             """
     mycursor.execute(query)
-    for row in mycursor:
-        print(row)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['USER', 'NUMBER OF RECIPES'], tablefmt='psql'))
 
 #getting the recipe title with all the ingredients concatenated
 def query6():
@@ -72,32 +68,39 @@ def query6():
             ORDER BY rm_useracc.NAME
             """
     mycursor.execute(query)
-    for row in mycursor:
-        print (row)
+
 # selecting everything from Recipe_View
 def query7():
     query = """
             SELECT * FROM Recipe_View
             """
     mycursor.execute(query)
-    for row in mycursor:
-        print(row)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['USER', 'RECIPE_ID', 'RECIPE NAME', 'COOKING TIME', 'DESCRIPTION'], tablefmt='psql'))
+
 
 
 def query8(timeInput):
     query = "SELECT NAME, TITLE, COOKING_TIME FROM Recipe_View WHERE COOKING_TIME <= '" + timeInput + "'"
     mycursor.execute(query)
-    for row in mycursor:
-        print(row)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['NAME', 'TITLE', 'COOKING TIME'], tablefmt='psql'))
 
 def query9():
     query = """
             SELECT TITLE FROM rm_recipe
             """
     mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['RECIPE DATABASE'], tablefmt='psql'))
+
+def query10(titleInput):
+    query = "SELECT DESCRIPTION from rm_recipe WHERE TITLE = '" + titleInput + "'"
+    mycursor.execute(query)
+    print(titleInput + " recipe below.")
+    print("------------------------------------------------------------------------")
     for row in mycursor:
-        tupleWithoutComma = ''.join(row)
-        print("{:<15}".format(tupleWithoutComma))
+        print(row)
 
 def introText():
     print("")
