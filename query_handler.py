@@ -35,13 +35,8 @@ def query2(tagInput):
         print(row)
 
 # INGREDIENT NAMES FOR A GIVEN RECIPE
-def query3():
-    query = """
-            SELECT NAME from rm_ingredient 
-            JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID 
-            JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID 
-            WHERE rm_recipe.TITLE = 'Carbonara'
-            """
+def query3(recipeNameInput):
+    query = "SELECT NAME from rm_ingredient JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID WHERE rm_recipe.TITLE = '" + recipeNameInput + "'"
     mycursor.execute(query)
     for row in mycursor:
         print(row)
@@ -89,12 +84,8 @@ def query7():
         print(row)
 
 
-def query8():
-    query = """
-            SELECT NAME, TITLE, COOKING_TIME
-            FROM Recipe_View
-            WHERE COOKING_TIME <= 30
-            """
+def query8(timeInput):
+    query = "SELECT NAME, TITLE, COOKING_TIME FROM Recipe_View WHERE COOKING_TIME <= '" + timeInput + "'"
     mycursor.execute(query)
     for row in mycursor:
         print(row)
@@ -115,6 +106,9 @@ def introText():
     query9()
     print("------------------------------------------------------------------------")
     print("1. Provide a recipe tag to find it.")
-
-
-query2("Italian")
+    print("2. Type the recipe name to see the details.")
+    print("3. Provide a username to see all the recipes associated with it.")
+    print("4. Check all the usernames and how many recipes are associated with it.")
+    print("5. Create a View with recipe owner, recipe ID, recipe Title, cooking time and description.")
+    print("6. Show everything from the View created.")
+    print("7. Show recipe details with less then provided cooking time.")
