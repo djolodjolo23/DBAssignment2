@@ -37,10 +37,10 @@ def query2(tagInput):
 
 # INGREDIENT NAMES FOR A GIVEN RECIPE
 def query3(recipeNameInput):
-    query = "SELECT NAME from rm_ingredient JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID WHERE rm_recipe.TITLE = '" + recipeNameInput + "'"
+    query = "SELECT NAME, recipe_ingredient.INGREDIENT_DESC FROM rm_ingredient JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID WHERE rm_recipe.TITLE = '" + recipeNameInput + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
-    print(tabulate(myresult, headers=['INGREDIENT NAME'], tablefmt='psql'))
+    print(tabulate(myresult, headers=['INGREDIENT NAME', "INGREDIENT DETAILS"], tablefmt='psql'))
 
 def query4(userInput):
     query = "SELECT NAME, rm_recipe.TITLE FROM rm_useracc JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID WHERE rm_useracc.NAME = '" + userInput + "'"
@@ -61,23 +61,23 @@ def query5():
 #getting the recipe title with all the ingredients concatenated
 def query6():
     query = """
-            CREATE VIEW Recipe_View AS
-            SELECT rm_useracc.NAME, rm_recipe.RECIPE_ID, rm_recipe.TITLE, rm_recipe.COOKING_TIME, rm_recipe.DESCRIPTION
+            CREATE VIEW the_view AS
+            SELECT rm_useracc.NAME, rm_recipe.RECIPE_ID, rm_recipe.TITLE, rm_recipe.COOKING_TIME
             FROM rm_useracc, rm_recipe
             WHERE rm_useracc.USERACC_ID = rm_recipe.USERACC_ID
             ORDER BY rm_useracc.NAME
             """
     mycursor.execute(query)
+    print("Success!")
 
 # selecting everything from Recipe_View
 def query7():
     query = """
-            SELECT * FROM Recipe_View
+            SELECT * FROM the_view
             """
     mycursor.execute(query)
     myresult = mycursor.fetchall()
-    print(tabulate(myresult, headers=['USER', 'RECIPE_ID', 'RECIPE NAME', 'COOKING TIME', 'DESCRIPTION'], tablefmt='psql'))
-
+    print(tabulate(myresult, headers=['USER', 'RECIPE_ID', 'RECIPE NAME', 'COOKING TIME'], tablefmt='psql'))
 
 
 def query8(timeInput):
@@ -94,6 +94,7 @@ def query9():
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['RECIPE DATABASE'], tablefmt='psql'))
 
+# gives a recipe description 
 def query10(titleInput):
     query = "SELECT DESCRIPTION from rm_recipe WHERE TITLE = '" + titleInput + "'"
     mycursor.execute(query)
@@ -108,10 +109,12 @@ def introText():
     print("------------------------------------------------------------------------")
     query9()
     print("------------------------------------------------------------------------")
-    print("1. Provide a recipe tag to find it.")
-    print("2. Type the recipe name to see the details.")
-    print("3. Provide a username to see all the recipes associated with it.")
-    print("4. Check all the usernames and how many recipes are associated with it.")
-    print("5. Create a View with recipe owner, recipe ID, recipe Title, cooking time and description.")
-    print("6. Show everything from the View created.")
-    print("7. Show recipe details with less then provided cooking time.")
+    print("1. Provide the recipe name and show the full description.")
+    print("2. Provide a recipe tag to find it.")
+    print("3. Type the recipe name to see the details.")
+    print("4. Provide a username to see all the recipes associated with it.")
+    print("5. Check all the usernames and how many recipes are associated with it.")
+    print("6. Create a View with recipe owner, recipe ID, recipe Title, cooking time and description.")
+    print("7. Show everything from the View created.")
+    print("8. Show recipe details with less then provided cooking time.")
+query3("Carbonara")
