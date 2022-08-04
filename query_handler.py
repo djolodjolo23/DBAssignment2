@@ -114,7 +114,7 @@ def introText():
     print("3. Type the recipe name to see the details.")
     print("4. Provide a username to see all the recipes associated with it.")
     print("5. Check all the usernames and how many recipes are associated with it.")
-    print("6. Create a View with recipe owner, recipe ID, recipe Title, cooking time and description.")
+    print("6. Create a View with recipe owner, recipe ID, recipe Title, cooking time.")
     print("7. Show everything from the View created.")
     print("8. Show recipe details with less then provided cooking time.")
 query3("Carbonara")
