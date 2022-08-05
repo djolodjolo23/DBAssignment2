@@ -1,8 +1,5 @@
 from query_handler import *
 
-print("THE RECIPE FINDER!")
-print("------------------")
-
 incrementNumber = 0
 
 

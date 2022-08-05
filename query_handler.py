@@ -30,7 +30,8 @@ def query1():
 
 # TAGS WITH RECIPE TITLE AND COOKING TIME
 def tagTitleCookingTimeQuery(tagInput):
-    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = '" + tagInput + "'"
+    newString = "%" + tagInput + "%"
+    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = '" + newString + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['TAG', 'RECIPE NAME', 'COOKING TIME'], tablefmt='psql'))
@@ -45,7 +46,8 @@ def titleRecipeIngredientsQuery(recipeNameInput):
     print(tabulate(myresult, headers=['INGREDIENT NAME', "INGREDIENT DETAILS"], tablefmt='psql'))
 
 def userRecipeQuery(userInput):
-    query = "SELECT NAME, rm_recipe.TITLE FROM rm_useracc JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID WHERE rm_useracc.NAME = '" + userInput + "'"
+    newString = "%" + userInput + "%"
+    query = "SELECT NAME, rm_recipe.TITLE FROM rm_useracc JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID WHERE rm_useracc.NAME = '" + newString + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['USER', 'RECIPE NAME'], tablefmt='psql'))
@@ -98,10 +100,10 @@ def recipeTitlesQuery():
 
 # gives a recipe description 
 def recipeDescriptionQuery(titleInput):
-    query = "SELECT DESCRIPTION from rm_recipe WHERE TITLE = '" + titleInput + "'"
+    assistTitleQuery2(titleInput)
+    newString = "%" + titleInput + "%"
+    query = "SELECT DESCRIPTION from rm_recipe WHERE TITLE LIKE '" + newString + "'"
     mycursor.execute(query)
-    print(titleInput + " recipe below.")
-    print("------------------------------------------------------------------------")
     for row in mycursor:
         print(row)
 
@@ -112,7 +114,14 @@ def assistTitleQuery(titleInput):
     for row in mycursor:
         tupleWithoutComma = "".join(row)
         print(tupleWithoutComma + " ingredients below.")
-    
+
+def assistTitleQuery2(titleInput):
+    newString = "%" + titleInput + "%"
+    query = "SELECT TITLE FROM rm_recipe WHERE TITLE LIKE '" + newString + "'"
+    mycursor.execute(query)
+    for row in mycursor:
+        tupleWithoutComma = "".join(row)
+        print(tupleWithoutComma + " recipe below.")
     
     
 
@@ -130,4 +139,4 @@ def introText():
     print("6. Create a View with recipe owner, recipe ID, recipe Title, cooking time.")
     print("7. Show everything from the View created.")
     print("8. Show recipe details with less then provided cooking time.")
-titleRecipeIngredientsQuery("wok")
+recipeDescriptionQuery("arb")
