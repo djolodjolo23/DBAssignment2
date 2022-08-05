@@ -24,30 +24,30 @@ while True:
         print("------------")
         if mainEntry == 1:
             subEntry = str(input("Provide a recipe name:"))
-            query10(subEntry)
+            recipeDescriptionQuery(subEntry)
             entry = str(input("Press any key to go back."))
         if mainEntry == 2:
             subEntry = str(input("Provide a tag:"))
-            query2(subEntry)
+            tagTitleCookingTimeQuery(subEntry)
             entry = str(input("Press any key to go back."))
         elif mainEntry == 3:
             subEntry = str(input("Provide the recipe name:"))
-            query3(subEntry)
+            titleRecipeIngredientsQuery(subEntry)
             entry = str(input("Press any key to go back."))
         elif mainEntry == 4:
             subEntry = str(input("Provide a username:"))
-            query4(subEntry)
+            userRecipeQuery(subEntry)
             entry = str(input("Press any key to go back."))
         elif mainEntry == 5:
-            query5()
+            userCountRecipeQuery()
             entry = str(input("Press any key to go back."))
         elif mainEntry == 6:
-            query6()
+            createViewQuery()
             entry = str(input("Press any key to go back."))
         elif mainEntry == 7:
-            query7()
+            everythingFromViewQuery()
             entry = str(input("Press any key to go back."))
         elif mainEntry == 8:
             subEntry = str(input("Provide the cooking time:"))
-            query8(subEntry)
+            nameTitleCookingTimeFromViewQuery(subEntry)
             entry = str(input("Press any key to go back."))
