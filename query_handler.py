@@ -31,7 +31,7 @@ def query1():
 # TAGS WITH RECIPE TITLE AND COOKING TIME
 def tagTitleCookingTimeQuery(tagInput):
     newString = "%" + tagInput + "%"
-    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME = '" + newString + "'"
+    query = "SELECT rm_tags.TAG_NAME, TITLE, COOKING_TIME FROM rm_recipe JOIN rm_recipe_tags on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID JOIN rm_tags on rm_recipe_tags.TAGS_ID = rm_tags.TAGS_ID WHERE rm_tags.TAG_NAME LIKE '" + newString + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['TAG', 'RECIPE NAME', 'COOKING TIME'], tablefmt='psql'))
@@ -45,13 +45,15 @@ def titleRecipeIngredientsQuery(recipeNameInput):
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['INGREDIENT NAME', "INGREDIENT DETAILS"], tablefmt='psql'))
 
+# user and recipe title associated with the user
 def userRecipeQuery(userInput):
     newString = "%" + userInput + "%"
-    query = "SELECT NAME, rm_recipe.TITLE FROM rm_useracc JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID WHERE rm_useracc.NAME = '" + newString + "'"
+    query = "SELECT NAME, rm_recipe.TITLE FROM rm_useracc JOIN rm_recipe ON rm_useracc.USERACC_ID = rm_recipe.USERACC_ID WHERE rm_useracc.NAME LIKE '" + newString + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['USER', 'RECIPE NAME'], tablefmt='psql'))
 
+#show all users and the amount of recipes they are associated with
 def userCountRecipeQuery():
     query = """
             SELECT rm_useracc.NAME, COUNT(TITLE) FROM rm_recipe
@@ -62,7 +64,29 @@ def userCountRecipeQuery():
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['USER', 'NUMBER OF RECIPES'], tablefmt='psql'))
 
-#getting the recipe title with all the ingredients concatenated
+#show ingredient names and count of recipes
+def ingredientNameCountInRecipes():
+    query = "SELECT rm_ingredient.NAME, COUNT(rm_recipe.RECIPE_ID) FROM rm_ingredient JOIN recipe_ingredient ON rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe ON recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID GROUP BY rm_ingredient.NAME ORDER BY COUNT(rm_recipe.RECIPE_ID) DESC"
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['INGREDIENT', 'NUMBER OF RECIPES IT APPEARS'], tablefmt='psql'))
+
+# show tags and the recipes connected to it
+def tagNameCountInRecipes():
+    query = "SELECT rm_tags.TAG_NAME, COUNT(rm_recipe.RECIPE_ID) FROM rm_tags JOIN rm_recipe_tags on rm_tags.TAGS_ID = rm_recipe_tags.TAGS_ID JOIN rm_recipe on rm_recipe_tags.RECIPE_ID = rm_recipe.RECIPE_ID group by rm_tags.TAG_NAME"
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    print(tabulate(myresult, headers=['TAGS', 'NUMBER OF RECIPES ASSOCIATED WITH'], tablefmt='psql'))
+
+# show average cooking time
+def averageCookingTime():
+    query = "SELECT ROUND(AVG(rm_recipe.COOKING_TIME)) AS "'AVERAGE COOKING TIME'" FROM rm_recipe"
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    for row in myresult:
+        print(row)
+
+#creating the View
 def createViewQuery():
     query = """
             CREATE VIEW the_view AS
@@ -83,16 +107,18 @@ def everythingFromViewQuery():
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['USER', 'RECIPE_ID', 'RECIPE NAME', 'COOKING TIME'], tablefmt='psql'))
 
-
+# getting the name, title, cooking_time from a View where recipe time is less then the input
 def nameTitleCookingTimeFromViewQuery(timeInput):
     query = "SELECT NAME, TITLE, COOKING_TIME FROM Recipe_View WHERE COOKING_TIME <= '" + timeInput + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['NAME', 'TITLE', 'COOKING TIME'], tablefmt='psql'))
 
+# only recipe titles, for homepage with all the recipes
 def recipeTitlesQuery():
     query = """
             SELECT TITLE FROM rm_recipe
+            ORDER BY TITLE
             """
     mycursor.execute(query)
     myresult = mycursor.fetchall()
@@ -107,6 +133,7 @@ def recipeDescriptionQuery(titleInput):
     for row in mycursor:
         print(row)
 
+#prints the title with "ingredients below"
 def assistTitleQuery(titleInput):
     newString = "%" + titleInput + "%"
     query = "SELECT TITLE FROM rm_recipe WHERE TITLE LIKE '" + newString + "'"
@@ -115,6 +142,7 @@ def assistTitleQuery(titleInput):
         tupleWithoutComma = "".join(row)
         print(tupleWithoutComma + " ingredients below.")
 
+#prints the title with "recipe below"
 def assistTitleQuery2(titleInput):
     newString = "%" + titleInput + "%"
     query = "SELECT TITLE FROM rm_recipe WHERE TITLE LIKE '" + newString + "'"
@@ -127,8 +155,9 @@ def assistTitleQuery2(titleInput):
 
 def introText():
     print("")
-    print("                           RECIPE FINDER!")
+    print("                           RECIPE FINDER!                               ")
     print("------------------------------------------------------------------------")
+    averageCookingTime()
     recipeTitlesQuery()
     print("------------------------------------------------------------------------")
     print("1. Provide the recipe name and show the full description.")
@@ -139,4 +168,5 @@ def introText():
     print("6. Create a View with recipe owner, recipe ID, recipe Title, cooking time.")
     print("7. Show everything from the View created.")
     print("8. Show recipe details with less then provided cooking time.")
-recipeDescriptionQuery("arb")
+    print("9. Show ingredients and the amount of recipes they appear in.")
+    print("10. Show tags and the amount of recipes they are associated with.")

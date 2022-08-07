@@ -48,3 +48,12 @@ while True:
             subEntry = str(input("Provide the cooking time:"))
             nameTitleCookingTimeFromViewQuery(subEntry)
             entry = str(input("Press any key to go back."))
+        elif mainEntry == 9:
+            ingredientNameCountInRecipes()
+            entry = str(input("Press any key to go back."))
+        elif mainEntry == 10:
+            tagNameCountInRecipes()
+            entry = str(input("Press any key to go back."))
+        elif mainEntry == 11:
+            averageCookingTime()
+            entry = str(input("Press any key to go back."))
