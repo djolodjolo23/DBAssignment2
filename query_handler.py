@@ -80,11 +80,10 @@ def tagNameCountInRecipes():
 
 # show average cooking time
 def averageCookingTime():
-    query = "SELECT ROUND(AVG(rm_recipe.COOKING_TIME)) AS "'AVERAGE COOKING TIME'" FROM rm_recipe"
+    query = "SELECT ROUND(AVG(rm_recipe.COOKING_TIME)) AS 'COOKING TIME' FROM rm_recipe"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
-    for row in myresult:
-        print(row)
+    print(tabulate(myresult, headers=['AVERAGE COOKING TIME'], tablefmt='psql'))
 
 #creating the View
 def createViewQuery():
@@ -131,7 +130,8 @@ def recipeDescriptionQuery(titleInput):
     query = "SELECT DESCRIPTION from rm_recipe WHERE TITLE LIKE '" + newString + "'"
     mycursor.execute(query)
     for row in mycursor:
-        print(row)
+        tupleWithoutComma = "".join(row)
+        print(tupleWithoutComma)
 
 #prints the title with "ingredients below"
 def assistTitleQuery(titleInput):
@@ -157,7 +157,6 @@ def introText():
     print("")
     print("                           RECIPE FINDER!                               ")
     print("------------------------------------------------------------------------")
-    averageCookingTime()
     recipeTitlesQuery()
     print("------------------------------------------------------------------------")
     print("1. Provide the recipe name and show the full description.")
@@ -170,3 +169,4 @@ def introText():
     print("8. Show recipe details with less then provided cooking time.")
     print("9. Show ingredients and the amount of recipes they appear in.")
     print("10. Show tags and the amount of recipes they are associated with.")
+    print("11. Show the average cooking time for all the recipes.")
