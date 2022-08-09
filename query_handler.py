@@ -13,7 +13,7 @@ db = mysql.connector.connect(
 #
 mycursor = db.cursor()
 
-
+# schema
 DB_NAME = "assignment3"
 
 mycursor.execute("USE {}".format(DB_NAME))
@@ -38,6 +38,7 @@ def tagTitleCookingTimeQuery(tagInput):
 
 # INGREDIENT NAMES FOR A GIVEN RECIPE
 def titleRecipeIngredientsQuery(recipeNameInput):
+    # assist query to print the entire recipe name from a wildcard LIKE
     assistTitleQuery(recipeNameInput)
     newString = "%" + recipeNameInput + "%"
     query = "SELECT NAME, recipe_ingredient.INGREDIENT_DESC FROM rm_ingredient JOIN recipe_ingredient on rm_ingredient.INGREDIENT_ID = recipe_ingredient.INGREDIENT_ID JOIN rm_recipe on recipe_ingredient.RECIPE_ID = rm_recipe.RECIPE_ID WHERE rm_recipe.TITLE LIKE'" + newString + "'"
@@ -125,6 +126,7 @@ def recipeTitlesQuery():
 
 # gives a recipe description 
 def recipeDescriptionQuery(titleInput):
+    # assist query to print the entire recipe name from a wildcard LIKE
     assistTitleQuery2(titleInput)
     newString = "%" + titleInput + "%"
     query = "SELECT DESCRIPTION from rm_recipe WHERE TITLE LIKE '" + newString + "'"
@@ -133,7 +135,7 @@ def recipeDescriptionQuery(titleInput):
         tupleWithoutComma = "".join(row)
         print(tupleWithoutComma)
 
-#prints the title with "ingredients below"
+#prints the recipe name with "ingredients below"
 def assistTitleQuery(titleInput):
     newString = "%" + titleInput + "%"
     query = "SELECT TITLE FROM rm_recipe WHERE TITLE LIKE '" + newString + "'"
@@ -142,7 +144,7 @@ def assistTitleQuery(titleInput):
         tupleWithoutComma = "".join(row)
         print(tupleWithoutComma + " ingredients below.")
 
-#prints the title with "recipe below"
+#prints the recipe name with "recipe below"
 def assistTitleQuery2(titleInput):
     newString = "%" + titleInput + "%"
     query = "SELECT TITLE FROM rm_recipe WHERE TITLE LIKE '" + newString + "'"
@@ -152,11 +154,12 @@ def assistTitleQuery2(titleInput):
         print(tupleWithoutComma + " recipe below.")
     
     
-
+#intro text to be called each time the main menu is up
 def introText():
     print("")
     print("                           RECIPE FINDER!                               ")
     print("------------------------------------------------------------------------")
+    #prints the recipe names in the main menu
     recipeTitlesQuery()
     print("------------------------------------------------------------------------")
     print("1. Provide the recipe name and show the full description.")
