@@ -23,7 +23,7 @@ while True:
             subEntry = str(input("Provide a recipe name:"))
             recipeDescriptionQuery(subEntry)
             entry = str(input("Press any key to go back."))
-        if mainEntry == 2:
+        elif mainEntry == 2:
             subEntry = str(input("Provide a tag:"))
             tagTitleCookingTimeQuery(subEntry)
             entry = str(input("Press any key to go back."))
@@ -52,8 +52,10 @@ while True:
             ingredientNameCountInRecipes()
             entry = str(input("Press any key to go back."))
         elif mainEntry == 10:
-            tagNameCountInRecipes()
-            entry = str(input("Press any key to go back."))
+           tagNameCountInRecipes()
+           entry = str(input("Press any key to go back."))
         elif mainEntry == 11:
             averageCookingTime()
             entry = str(input("Press any key to go back."))
+        else:
+            print("Wrong number, try again!")

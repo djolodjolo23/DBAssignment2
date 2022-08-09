@@ -108,7 +108,7 @@ def everythingFromViewQuery():
 
 # getting the name, title, cooking_time from a View where recipe time is less then the input
 def nameTitleCookingTimeFromViewQuery(timeInput):
-    query = "SELECT NAME, TITLE, COOKING_TIME FROM Recipe_View WHERE COOKING_TIME <= '" + timeInput + "'"
+    query = "SELECT NAME, TITLE, COOKING_TIME FROM the_view WHERE COOKING_TIME <= '" + timeInput + "'"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     print(tabulate(myresult, headers=['NAME', 'TITLE', 'COOKING TIME'], tablefmt='psql'))
@@ -170,3 +170,7 @@ def introText():
     print("9. Show ingredients and the amount of recipes they appear in.")
     print("10. Show tags and the amount of recipes they are associated with.")
     print("11. Show the average cooking time for all the recipes.")
+
+
+mycursor.close()
+db.close()
