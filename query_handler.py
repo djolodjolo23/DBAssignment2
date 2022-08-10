@@ -174,6 +174,3 @@ def introText():
     print("10. Show tags and the amount of recipes they are associated with.")
     print("11. Show the average cooking time for all the recipes.")
 
-
-mycursor.close()
-db.close()
